@@ -1,6 +1,7 @@
 package com.ecommerce.ecomprodservicedec25.services;
 
 import com.ecommerce.ecomprodservicedec25.dtos.FakeStoreProductDto;
+import com.ecommerce.ecomprodservicedec25.exceptions.ProductNotFoundException;
 import com.ecommerce.ecomprodservicedec25.models.Category;
 import com.ecommerce.ecomprodservicedec25.models.Product;
 import org.springframework.stereotype.Service;
@@ -39,19 +40,31 @@ public class FakeStoreProductService implements ProductService{
 
     //this service implementation uses FakeStoreApi to fetch products
     @Override
-    public Product getProductById(Long productId) {
+    public Product getProductById(Long productId) throws ProductNotFoundException {
         //Make an API call to the FakeStoreApi to get the product with the given id
         //https://fakestoreapi.com/products/10
+
         FakeStoreProductDto fakeStoreProductDto = restTemplate.getForObject(
                 "https://fakestoreapi.com/products/" + productId,
-                FakeStoreProductDto.class);
+                FakeStoreProductDto.class
+        );
+
+        if(fakeStoreProductDto == null){
+            throw new ProductNotFoundException(
+                    "Product with id:- " + productId + " doesn't exist."
+            );
+
+        }
 
         //convert FakeStoreDto object into a Product object
         return convertFakeStoreDtoToProduct(fakeStoreProductDto);
+
+        ////throw new RuntimeException("Something went wrong!!");
     }
 
     @Override
     public List<Product> getAllProducts() {
+        //Method 1: by converting the api response into array as at runtime, type of array is preserved as Generics is only valid for Collections class and not to arrays
         FakeStoreProductDto[]  fakeStoreProductDtos = restTemplate.getForObject(
                 "https://fakestoreapi.com/products", FakeStoreProductDto[].class
         );
@@ -59,6 +72,20 @@ public class FakeStoreProductService implements ProductService{
         for(FakeStoreProductDto fakeStoreProductDto : fakeStoreProductDtos){
             products.add(convertFakeStoreDtoToProduct(fakeStoreProductDto));
         }
+
+         //Method 2: by converting api response to general list, this solves the compilation error, but we get runtime error as ClassCastException.
+        //I did this just to try out.
+        /*
+        List<FakeStoreProductDto> fakeStoreProductDtos = restTemplate.getForObject(
+                "https://fakestoreapi.com/products",
+                List.class
+        );
+        List<Product> products = new ArrayList<>();
+        for (FakeStoreProductDto fakeStoreProductDto : fakeStoreProductDtos) {
+            products.add(convertFakeStoreDtoToProduct(fakeStoreProductDto));
+        }
+
+         */
         return products;
     }
 }
