@@ -3,6 +3,7 @@ package com.ecommerce.ecomprodservicedec25.Controller;
 import com.ecommerce.ecomprodservicedec25.exceptions.ProductNotFoundException;
 import com.ecommerce.ecomprodservicedec25.models.Product;
 import com.ecommerce.ecomprodservicedec25.services.ProductService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,8 @@ import java.util.Locale;
 public class ProductController {
     private ProductService productService;
 
-    public ProductController(ProductService productService){
+    public ProductController(@Qualifier("selfProductService") ProductService productService){
+        //using "@Qualifier" annotation, we have told Spring framework to inject "selfProductService" bean into the reference "productService"
         this.productService = productService;
     }
 
