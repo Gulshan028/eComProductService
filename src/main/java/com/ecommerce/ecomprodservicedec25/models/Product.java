@@ -1,6 +1,8 @@
 package com.ecommerce.ecomprodservicedec25.models;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +15,8 @@ public class Product extends BaseModel{
     private String description;
     private String imageUrl;
     private double price;
-    @ManyToOne
+    @ManyToOne(fetch = jakarta.persistence.FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn
     private Category category;
 
 }

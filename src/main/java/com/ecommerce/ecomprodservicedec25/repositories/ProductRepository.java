@@ -2,7 +2,9 @@ package com.ecommerce.ecomprodservicedec25.repositories;
 
 import com.ecommerce.ecomprodservicedec25.models.Category;
 import com.ecommerce.ecomprodservicedec25.models.Product;
+import com.ecommerce.ecomprodservicedec25.projections.ProductWithTitleAndPrice;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,7 +18,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     //this method is equivalent to the query: "select * from products where id = productId;"
 
     @Override
-    List<Product> findAll();
+    List<Product> findAll();     //select * from products;
 
     Optional<Product> findByTitleContains(String str);
     //QUERY: select * from products where title like '%str%';
@@ -28,7 +30,24 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     //Category model. Hence, the above method shows this thing as "Category_Id", where Category is the model and 'Id' is its attribute.
 
 
+    @Override
+    Product save(Product product);
+
+    @Override
+    void deleteById(Long aLong);
+
+    //// CUSTOM QUERIES
+    //Ex:- SELECT title, price FROM products WHERE id = 10;
+    //these kind of queries, where we are asking for only 2 attributes aren't present with JPA.
+    //Thus, we need to write them manually. Let's look into this. There are two ways to do this,
+    //viz. (i) HQL --> Hibernate Query Language; (ii) SQL --> Native Query / Structured Query Language
+    //Let's see HQL first.
+
+//    @Query("select p.title as title, p.price as price from Product p where p.title = :title and p.price = :price")
+//    List<ProductWithTitleAndPrice> getProductTitleAndPrice(String title, Double price);
 
 
-
+    //now, let's see the SQL Query; Remember, Native Query = SQL Query
+    @Query(value = "select p.title as title, p.price as price from products p where p.title = :title and p.price = :price",  nativeQuery = true)
+    List<ProductWithTitleAndPrice> getProductTitleAndPriceSQL(String title, Double price);
 }
