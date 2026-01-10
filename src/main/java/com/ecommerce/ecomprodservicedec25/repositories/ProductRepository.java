@@ -3,6 +3,9 @@ package com.ecommerce.ecomprodservicedec25.repositories;
 import com.ecommerce.ecomprodservicedec25.models.Category;
 import com.ecommerce.ecomprodservicedec25.models.Product;
 import com.ecommerce.ecomprodservicedec25.projections.ProductWithTitleAndPrice;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -17,8 +20,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Optional<Product> findById(Long productId);
     //this method is equivalent to the query: "select * from products where id = productId;"
 
-    @Override
-    List<Product> findAll();     //select * from products;
+
+    Page<Product> findAll(Pageable pageable);     //select * from products;
 
     Optional<Product> findByTitleContains(String str);
     //QUERY: select * from products where title like '%str%';

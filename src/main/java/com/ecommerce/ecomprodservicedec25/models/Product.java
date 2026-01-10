@@ -15,7 +15,7 @@ public class Product extends BaseModel{
     private String description;
     private String imageUrl;
     private double price;
-    @ManyToOne(fetch = jakarta.persistence.FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(/*fetch = jakarta.persistence.FetchType.LAZY, */cascade = CascadeType.REMOVE)
     @JoinColumn
     private Category category;
 

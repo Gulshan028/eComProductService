@@ -13,6 +13,6 @@ public class Category extends BaseModel {
     @Column(unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)     //mappedBy can only be used on @OneToMany side
-    private List<Product> products;
+//    @OneToMany(mappedBy = "category", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)     //mappedBy can only be used on @OneToMany side
+//    private List<Product> products;
 }

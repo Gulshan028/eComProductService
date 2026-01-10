@@ -4,6 +4,8 @@ import com.ecommerce.ecomprodservicedec25.exceptions.ProductNotFoundException;
 import com.ecommerce.ecomprodservicedec25.models.Product;
 import com.ecommerce.ecomprodservicedec25.services.ProductService;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -48,8 +50,9 @@ public class ProductController {
     }
 
     @GetMapping()
-    public List<Product> getAllProducts(){
-        return productService.getAllProducts();
+    public Page<Product> getAllProducts(@RequestParam("pageNumber") int pageNumber,
+                                        @RequestParam("pageSize") int pageSize){
+        return productService.getAllProducts(pageNumber, pageSize);
     }
 
     @PostMapping()

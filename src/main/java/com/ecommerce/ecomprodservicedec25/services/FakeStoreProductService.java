@@ -4,6 +4,8 @@ import com.ecommerce.ecomprodservicedec25.dtos.FakeStoreProductDto;
 import com.ecommerce.ecomprodservicedec25.exceptions.ProductNotFoundException;
 import com.ecommerce.ecomprodservicedec25.models.Category;
 import com.ecommerce.ecomprodservicedec25.models.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -63,7 +65,7 @@ public class FakeStoreProductService implements ProductService{
     }
 
     @Override
-    public List<Product> getAllProducts() {
+    public Page<Product> getAllProducts(int pageNumber, int pageSize) {
         //Method 1: by converting the api response into array as at runtime, type of array is preserved as Generics is only valid for Collections class and not to arrays
         FakeStoreProductDto[]  fakeStoreProductDtos = restTemplate.getForObject(
                 "https://fakestoreapi.com/products", FakeStoreProductDto[].class
@@ -86,7 +88,7 @@ public class FakeStoreProductService implements ProductService{
         }
 
          */
-        return products;
+        return new PageImpl<>(products);
     }
 
     @Override
