@@ -20,7 +20,7 @@ import java.util.Locale;
 public class ProductController {
     private ProductService productService;
 
-    public ProductController(@Qualifier("selfProductService") ProductService productService){
+    public ProductController(@Qualifier("fakeStoreProductService") ProductService productService){
         //using "@Qualifier" annotation, we have told Spring framework to inject "selfProductService" bean into the reference "productService"
         this.productService = productService;
     }
